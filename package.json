@@ -1,0 +1,25 @@
+{
+  "name": "portfolio-ai-backend",
+  "version": "1.0.0",
+  "description": "AI chatbot backend for Harsh Yadav's portfolio",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon src/index.js",
+    "start": "node src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Harsh Yadav",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "mongoose": "^8.23.1",
+    "openai": "^6.35.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}
