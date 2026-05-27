@@ -2,6 +2,7 @@ import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import chatRoutes from "./routes/chat.routes.js";
+import uploadRoutes from "./routes/upload.routes.js";
 import { connectDB } from "./config/db.js";
 
 const app = express();
@@ -32,6 +33,7 @@ app.get("/health", (req, res) => {
 });
 
 app.use("/api", chatRoutes);
+app.use("/api", uploadRoutes);
 
 app.use((req, res) => {
   res.status(404).json({ error: "Not Found", path: req.originalUrl });
@@ -39,6 +41,14 @@ app.use((req, res) => {
 
 app.use((err, req, res, next) => {
   console.error("[error]", err);
+
+  if (err.name === "MulterError") {
+    return res.status(400).json({
+      error: `Upload error: ${err.message}`,
+      code: err.code,
+    });
+  }
+
   res.status(err.status || 500).json({
     error: err.message || "Internal Server Error",
   });

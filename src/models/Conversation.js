@@ -20,6 +20,14 @@ const messageSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now },
 });
 
+const resumeUploadSchema = new mongoose.Schema({
+  s3Key: { type: String, required: true },
+  originalName: { type: String, required: true },
+  size: { type: Number, required: true },
+  mimeType: { type: String, required: true },
+  uploadedAt: { type: Date, default: Date.now },
+});
+
 const conversationSchema = new mongoose.Schema(
   {
     sessionId: {
@@ -40,6 +48,10 @@ const conversationSchema = new mongoose.Schema(
       type: Date,
       default: Date.now,
       index: true,
+    },
+    resumeUploads: {
+      type: [resumeUploadSchema],
+      default: [],
     },
   },
   {

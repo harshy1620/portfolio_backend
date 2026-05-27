@@ -1,3 +1,5 @@
+// We use the "openai" npm package because Gemini exposes an OpenAI-compatible endpoint.
+// Only the baseURL + API key change — all calls go to Google's Gemini servers.
 import OpenAI from "openai";
 import { HARSH_PERSONA } from "../data/persona.js";
 import { Conversation } from "../models/Conversation.js";
@@ -6,18 +8,21 @@ let client = null;
 
 function getClient() {
   if (client) return client;
-  if (!process.env.OPENAI_API_KEY) {
-    throw new Error("OPENAI_API_KEY is not set in environment");
+  if (!process.env.GEMINI_API_KEY) {
+    throw new Error("GEMINI_API_KEY is not set in environment");
   }
-  client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+  client = new OpenAI({
+    apiKey: process.env.GEMINI_API_KEY,
+    baseURL: "https://generativelanguage.googleapis.com/v1beta/openai/",
+  });
   return client;
 }
 
 export async function generateChatReply(messages) {
-  const openai = getClient();
-  const model = process.env.OPENAI_MODEL || "gpt-4o-mini";
+  const aiClient = getClient();
+  const model = process.env.GEMINI_MODEL || "gemini-2.0-flash";
 
-  const completion = await openai.chat.completions.create({
+  const completion = await aiClient.chat.completions.create({
     model,
     messages: [
       { role: "system", content: HARSH_PERSONA },
