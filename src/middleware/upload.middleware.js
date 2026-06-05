@@ -9,9 +9,6 @@ const ALLOWED_MIME_TYPES = new Set([
 ]);
 
 function fileFilter(req, file, cb) {
-  console.log("[upload] file received:", {
-req,file,cb
-  });
   if (!ALLOWED_MIME_TYPES.has(file.mimetype)) {
     const err = new Error(
       `Unsupported file type: ${file.mimetype}. Allowed: PDF, DOC, DOCX.`
@@ -28,4 +25,3 @@ export const resumeUpload = multer({
   limits: { fileSize: MAX_FILE_SIZE },
   fileFilter,
 });
-console.log(resumeUpload,"resumeUpload---")

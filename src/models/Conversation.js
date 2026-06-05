@@ -53,6 +53,11 @@ const conversationSchema = new mongoose.Schema(
       type: [resumeUploadSchema],
       default: [],
     },
+    digestSentAt: {
+      type: Date,
+      default: null,
+      index: true,
+    },
   },
   {
     timestamps: true,

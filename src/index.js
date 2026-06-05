@@ -4,6 +4,7 @@ import cors from "cors";
 import chatRoutes from "./routes/chat.routes.js";
 import uploadRoutes from "./routes/upload.routes.js";
 import { connectDB } from "./config/db.js";
+import { registerAllCrons } from "./cron/index.js";
 
 const app = express();
 
@@ -56,6 +57,7 @@ app.use((err, req, res, next) => {
 
 async function start() {
   await connectDB();
+  registerAllCrons();
   app.listen(PORT, () => {
     console.log(`[server] listening on http://localhost:${PORT} (${NODE_ENV})`);
   });

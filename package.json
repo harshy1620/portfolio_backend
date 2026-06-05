@@ -14,12 +14,16 @@
   "license": "ISC",
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1045.0",
+    "@aws-sdk/s3-request-presigner": "^3.1057.0",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
+    "express-rate-limit": "^8.5.2",
     "mongoose": "^8.23.1",
     "multer": "^2.1.1",
-    "openai": "^6.35.0"
+    "node-cron": "^4.2.1",
+    "openai": "^6.35.0",
+    "resend": "^6.12.4"
   },
   "devDependencies": {
     "nodemon": "^3.1.14"
