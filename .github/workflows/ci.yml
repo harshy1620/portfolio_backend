@@ -1,0 +1,62 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    name: Install + syntax check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Syntax check all source files
+        run: |
+          find src scripts -name "*.js" -print0 \
+            | xargs -0 -n1 node --check
+
+      - name: Verify package.json scripts are valid
+        run: |
+          node -e "
+            const pkg = require('./package.json');
+            if (!pkg.scripts || !pkg.scripts.start || !pkg.scripts.dev) {
+              console.error('Missing required scripts: start, dev');
+              process.exit(1);
+            }
+            console.log('package.json scripts: OK');
+          "
+
+  deploy:
+    name: Deploy to EC2
+    needs: validate
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: SSH into EC2 and pull + restart
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            set -e
+            cd ~/portfolio-ai-backend
+            git pull origin main
+            npm ci --omit=dev
+            pm2 restart portfolio-ai-backend
+            echo "[deploy] done at $(date -u)"
