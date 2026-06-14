@@ -1,0 +1,42 @@
+# Dependencies (will be installed inside the image)
+node_modules
+
+# Secrets (passed at runtime via --env-file, not baked in)
+.env
+.env.*
+!.env.example
+
+# Git
+.git
+.gitignore
+.gitattributes
+
+# IDE / OS
+.vscode
+.idea
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs
+
+# Build artifacts (we don't have a build step yet, but future-proofing)
+dist
+build
+coverage
+
+# Docker
+Dockerfile
+.dockerignore
+docker-compose*.yml
+
+# Documentation (not needed at runtime)
+README.md
+docs
+
+# GitHub
+.github
+
+# OS-specific
+*.swp
