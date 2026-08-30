@@ -8,6 +8,10 @@ import { registerAllCrons } from "./cron/index.js";
 
 const app = express();
 
+// Behind Nginx (one hop). Without this req.ip is always 127.0.0.1, so the
+// rate limiters bucket every visitor together instead of per-IP.
+app.set("trust proxy", 1);
+
 const PORT = process.env.PORT || 5000;
 const NODE_ENV = process.env.NODE_ENV || "development";
 const CORS_ORIGINS = (process.env.CORS_ORIGINS || "")
